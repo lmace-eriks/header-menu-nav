@@ -1,0 +1,202 @@
+.noScroll {
+    height: 100%;
+    overflow: hidden !important;
+}
+
+.floatContainerActive {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    /* I am so sorry - LM */
+    z-index: 100001;
+    overflow-y: scroll;
+}
+
+.closeButton {
+    display: none;
+}
+
+.closeButtonActive {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    inset: 1rem 1rem auto auto;
+    cursor: pointer;
+    /* I am so sorry - LM */
+    z-index: 100002;
+    color: white;
+    border: 3px solid white;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.floatWrapper {}
+
+.bikeFeatureContainer {
+    width: 40vw;
+    max-width: 40rem;
+    background-color: #eaeaea;
+    padding: 0.5rem 0 1rem 0;
+    margin: 0.5rem;
+}
+
+.bikeFeatureContainerActive {
+    width: 100vw;
+    background-color: #eaeaea;
+    padding: 0.5rem 0 0.5rem 0;
+    margin-bottom: 1rem;
+    max-width: 80rem;
+}
+
+/* Mobile Rules - LM */
+@media (max-width: 1025px) {
+    .bikeFeatureContainer {
+        width: 80vw;
+    }
+}
+
+.floatContainer {
+    position: static;
+}
+
+.splitter {
+    display: flex;
+}
+
+/* Mobile Rules - LM */
+@media (max-width: 1025px) {
+    .splitter {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.bikeSplit {
+    width: 100%;
+}
+
+.bikeTitle {
+    text-align: center;
+    margin: 0;
+}
+
+.imageContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.bikeImage {
+    width: 90%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background-color: white;
+}
+
+/* Mobile Rules - LM */
+@media (max-width: 1025px) {
+    .bikeImage {
+        max-width: 60vw;
+    }
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.textSplit {
+    display: flex;
+    align-items: center;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
+
+.textSplitActive {
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 80%;
+}
+
+.descriptionWindow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.innerDescriptionText {
+    width: 80%;
+    text-align: justify;
+}
+
+/* Mobile Rules - LM */
+@media (max-width: 1025px) {
+    .innerDescriptionText {
+        width: 100%;
+    }
+}
+
+.redButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #ec1d24;
+    width: 40%;
+    min-width: 10rem;
+    height: 3rem;
+    padding: 0 1rem;
+    cursor: pointer;
+}
+
+.whiteButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 2px solid #ec1d24;
+    width: 40%;
+    min-width: 10rem;
+    height: 3rem;
+    padding: 0 1rem;
+    cursor: pointer;
+}
+
+/* Mid Rules - LM */
+@media (max-width: 1150px) {
+    .redButton {
+        /* font-size: 0.9rem; */
+    }
+}
+
+/* Mobile Rules - LM */
+@media (max-width: 1025px) {
+    .redButton {
+        min-width: 30vw;
+    }
+
+    .fullWidth {
+        width: 100%;
+        min-width: 100%
+    }
+}

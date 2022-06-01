@@ -1,0 +1,6 @@
+{
+  "bikefeature": {
+    "component": "BikeFeature",
+    "composition": "children"
+  }
+}
