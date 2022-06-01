@@ -1,6 +1,6 @@
 {
-  "bikefeature": {
-    "component": "BikeFeature",
+  "headermenunav": {
+    "component": "HeaderMenuNav",
     "composition": "children"
   }
 }

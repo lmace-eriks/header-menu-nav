@@ -1,9 +1,9 @@
 {
   "vendor": "eriksbikeshop",
-  "name": "bikefeature",
-  "version": "1.0.2",
-  "title": "BikeFeature",
-  "description": "BikeFeature component",
+  "name": "headermenunav",
+  "version": "1.0.0",
+  "title": "HeaderMenuNav",
+  "description": "HeaderMenuNav component",
   "defaultLocale": "pt-BR",
   "builders": {
     "messages": "1.x",
