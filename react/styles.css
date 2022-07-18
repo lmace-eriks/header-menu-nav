@@ -1,7 +1,13 @@
-html {
-    scroll-behavior: smooth;
-}
+.mainMenuContainer {}
 
-body {
-    overflow-x: hidden;
-}
+.mainMenuWrapper {}
+
+.mainMenuButton {}
+
+.mainMenuBorder {}
+
+.subMenuContainer {}
+
+.subMenuWrapper {}
+
+.subMenuBorder {}
