@@ -11,3 +11,14 @@
 .subMenuWrapper {}
 
 .subMenuBorder {}
+
+.darkOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
+.displayNone {
+    display: none;
+}
