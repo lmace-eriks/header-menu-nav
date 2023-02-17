@@ -111,7 +111,7 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
     <nav className={styles.mainMenuWrapper}>
       {
         mainMenu.map((menu, index) => (
-          <button className={styles.mainMenuButton} data-menuNumber={index} onClick={handleClickMenuItem}>
+          <button key={`mainmenu-${index}`} className={styles.mainMenuButton} data-menunumber={index} onClick={handleClickMenuItem}>
             {menu.text}
           </button>
         ))
