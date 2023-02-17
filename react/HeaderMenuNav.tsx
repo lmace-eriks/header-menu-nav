@@ -1,5 +1,6 @@
 import React, { ReactChildren } from 'react';
 import { useState, useEffect, useRef } from 'react';
+import { canUseDOM } from 'vtex.render-runtime';
 
 // Styles
 import styles from "./styles.css";
@@ -8,8 +9,12 @@ import styles from "./styles.css";
 import useOnClickOutside from './useClickOutside';
 
 interface HeaderMenuNavProps {
-  mainMenu: Array<string>
-  children: ReactChildren
+  mainMenu: Array<MainMenuObject>
+  children: ReactChildren | any
+}
+
+interface MainMenuObject {
+  text: string
 }
 
 const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMenu, children }) => {
@@ -21,6 +26,7 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
   const [menuNumber, setMenuNumber] = useState<any>();
   const [headerHeight, setHeaderHeight] = useState<number>(0);
 
+  const fullHeaderClass = "vtex-flex-layout-0-x-flexRow--full-desktop-header";
   const classPrefix = "eriksbikeshop-headermenunav-1-x-";
   const subMenuBorderClass = "subMenuBorder";
   const mainMenuBorderClass = "mainMenuBorder";
@@ -30,9 +36,9 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
   useOnClickOutside(parentNav, () => closeSubmenu());
 
   useEffect(() => {
-    // console.clear();
-
     // Toggle classes for menu display --
+    if (!canUseDOM) return;
+
     if (menu === undefined && verifyRefs()) {
       submenuRef.current.classList.remove(classPrefix + subMenuBorderClass);
       overlayRef.current.classList.remove(classPrefix + darkOverlayClass);
@@ -45,7 +51,6 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
 
     removeMainMenuUnderline();
 
-    // @ts-expect-error
     const openMenu = document.querySelector(`[data-menunumber="${menuNumber}"]`);
     openMenu?.classList.add(classPrefix + mainMenuBorderClass);
   })
@@ -61,26 +66,39 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
     return valueToReturn;
   }
 
-  const handleClick = (e: any) => {
+  const handleClickMenuItem = (e: any) => {
+    if (!canUseDOM) return;
+
     const menuClicked = Number(e.target.dataset.menunumber);
     setMenuNumber(menuClicked);
 
-    // @ts-expect-error
-    const fullHeaderHeight = document.getElementsByClassName("vtex-flex-layout-0-x-flexRow--full-desktop-header")[0].offsetHeight;
-
-    // @ts-expect-error
-    setMenu(children[menuClicked]);
-
+    const fullHeaderHeightElement: any = document.getElementsByClassName(fullHeaderClass)[0];
+    const fullHeaderHeight = fullHeaderHeightElement.offsetHeight;
     setHeaderHeight(fullHeaderHeight);
 
     // Reset Menu if already active. Useful for returning to the main menu from a submenu --
     if (menuNumber === menuClicked) {
-      setMenu(undefined);
-      setTimeout(() => {
-        // @ts-expect-error
-        setMenu(children[menuClicked]);
-      }, 1)
+      wipeAndRenderMenu(menuClicked);
+      return;
     }
+
+    setMenu(children[menuClicked]);
+  }
+
+  const wipeAndRenderMenu = (menuClicked: number) => {
+    setMenu(undefined);
+    setTimeout(() => {
+      setMenu(children[menuClicked]);
+    }, 1);
+  }
+
+  const removeMainMenuUnderline = () => {
+    if (!canUseDOM) return;
+
+    const allLinks = document.querySelectorAll(`[data-menunumber]`);
+    allLinks.forEach(mainMenuLink => {
+      mainMenuLink.classList.remove(classPrefix + mainMenuBorderClass);
+    });
   }
 
   const closeSubmenu = () => {
@@ -89,38 +107,58 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
     setMenu(undefined);
   }
 
-  const removeMainMenuUnderline = () => {
-    for (let i = 0; i < mainMenu.length; i++) {
-      // @ts-expect-error
-      const closedMenu = document.querySelector(`[data-menunumber="${i}"]`);
-      closedMenu?.classList.remove(classPrefix + mainMenuBorderClass);
-    }
-  }
+  const NavigationMenu = () => (
+    <nav className={styles.mainMenuWrapper}>
+      {
+        mainMenu.map((menu, index) => (
+          <button className={styles.mainMenuButton} data-menuNumber={index} onClick={handleClickMenuItem}>
+            {menu.text}
+          </button>
+        ))
+      }
+    </nav>
+  );
+
+  const SubMenuContainer = () => (
+    <div className={styles.subMenuContainer}>
+      <div ref={submenuRef} className={styles.subMenuWrapper} style={{ top: `${headerHeight}px` }}>
+        {menu}
+      </div>
+      <div ref={overlayRef} onClick={closeSubmenu} style={{ top: `${headerHeight}px` }}></div>
+    </div>
+  );
 
   return (
     <div ref={parentNav} className={styles.mainMenuContainer}>
-      <nav className={styles.mainMenuWrapper}>
-        {
-          mainMenu.map((menu, index) => (
-            <button className={styles.mainMenuButton} data-menuNumber={index} onClick={handleClick}>{menu}</button>
-          ))
-        }
-      </nav>
-      <div className={styles.subMenuContainer}>
-        <div ref={submenuRef} className={styles.subMenuWrapper} style={{ top: `${headerHeight}px` }}>
-          {menu}
-        </div>
-        <div ref={overlayRef} onClick={closeSubmenu} style={{ top: `${headerHeight}px` }}></div>
-      </div>
+      <NavigationMenu />
+      <SubMenuContainer />
     </div>
-  )
+  );
 }
 
 HeaderMenuNav.schema = {
-  title: 'editor.headermenunav.title',
-  description: 'editor.headermenunav.description',
+  title: 'Desktop Main Menu',
   type: 'object',
-  properties: {}
+  properties: {
+    mainMenu: {
+      title: "Main Menu",
+      type: "array",
+      items: {
+        properties: {
+          __editorItemTitle: {
+            title: "Site Editor Name",
+            desciption: "Only visible in Site Editor.",
+            type: "string",
+          },
+          text: {
+            title: "Text",
+            type: "string"
+          }
+        }
+      }
+    }
+  }
 }
 
 export default HeaderMenuNav;
+

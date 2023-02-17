@@ -1,6 +1,11 @@
 {
   "extends": "@vtex/tsconfig",
   "compilerOptions": {
+    "lib": [
+      "es2017",
+      "dom",
+      "es2018.promise"
+    ],
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
     "noEmitOnError": false,

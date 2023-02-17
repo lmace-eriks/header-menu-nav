@@ -1,9 +1,11 @@
 import { useEffect } from "react";
+import { canUseDOM } from "vtex.render-runtime";
 
-function useOnClickOutside(ref:any, handler:any) {
+function useOnClickOutside(ref: any, handler: any) {
     useEffect(
         () => {
-            const listener = (event:any) => {
+            if (!canUseDOM) return;
+            const listener = (event: any) => {
                 // Do nothing if clicking another menu item
                 if (event.target.className === "mainMenuItem") return;
 
@@ -12,14 +14,11 @@ function useOnClickOutside(ref:any, handler:any) {
 
                 handler(event);
             };
-            // @ts-expect-error
+
             document.addEventListener("mousedown", listener);
-            // @ts-expect-error
             document.addEventListener("touchstart", listener);
             return () => {
-                // @ts-expect-error
                 document.removeEventListener("mousedown", listener);
-                // @ts-expect-error
                 document.removeEventListener("touchstart", listener);
             };
         },
