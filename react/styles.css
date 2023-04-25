@@ -1,6 +1,6 @@
 .mainMenuContainer {}
 
-.mainMenuWrapper {}
+.mainNavButtonContainer {}
 
 .mainMenuButton {}
 
@@ -17,6 +17,7 @@
 .displayNone {}
 
 .mainMenuButton:focus-visible {
-    outline: 2px solid white;
-    outline-offset: 0.25rem;
+    outline: 5px solid darkorange;
+    outline-offset: 0.5rem;
+    border-radius: 0.25rem;
 }

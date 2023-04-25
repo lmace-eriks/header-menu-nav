@@ -10,6 +10,7 @@ import useOnClickOutside from './useClickOutside';
 
 interface HeaderMenuNavProps {
   mainMenu: Array<MainMenuObject>
+  fullHeaderClass: string
   children: ReactChildren | any
 }
 
@@ -17,7 +18,13 @@ interface MainMenuObject {
   text: string
 }
 
-const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMenu, children }) => {
+const classPrefix = "eriksbikeshop-headermenunav-1-x-";
+const subMenuBorderClass = "subMenuBorder";
+const mainMenuBorderClass = "mainMenuBorder";
+const darkOverlayClass = "darkOverlay";
+const displayNoneClass = "displayNone";
+
+const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMenu, fullHeaderClass, children }) => {
   const parentNav = useRef(null);
   const submenuRef = useRef<any>(null);
   const overlayRef = useRef<any>(null);
@@ -25,13 +32,6 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
   const [menu, setMenu] = useState<any>();
   const [menuNumber, setMenuNumber] = useState<any>();
   const [headerHeight, setHeaderHeight] = useState<number>(0);
-
-  const fullHeaderClass = "vtex-flex-layout-0-x-flexRow--full-desktop-header";
-  const classPrefix = "eriksbikeshop-headermenunav-1-x-";
-  const subMenuBorderClass = "subMenuBorder";
-  const mainMenuBorderClass = "mainMenuBorder";
-  const darkOverlayClass = "darkOverlay";
-  const displayNoneClass = "displayNone";
 
   useOnClickOutside(parentNav, () => closeSubmenu());
 
@@ -72,8 +72,8 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
     const menuClicked = Number(e.target.dataset.menunumber);
     setMenuNumber(menuClicked);
 
-    const fullHeaderHeightElement: any = document.getElementsByClassName(fullHeaderClass)[0];
-    const fullHeaderHeight = fullHeaderHeightElement.offsetHeight;
+    const fullHeaderElement: any = document.querySelector(`.${fullHeaderClass}`);
+    const fullHeaderHeight = fullHeaderElement.offsetHeight;
     setHeaderHeight(fullHeaderHeight);
 
     // Reset Menu if already active. Useful for returning to the main menu from a submenu --
@@ -108,30 +108,27 @@ const HeaderMenuNav: StorefrontFunctionComponent<HeaderMenuNavProps> = ({ mainMe
   }
 
   const NavigationMenu = () => (
-    <nav className={styles.mainMenuWrapper}>
-      {
-        mainMenu.map((menu, index) => (
-          <button key={`mainmenu-${index}`} className={styles.mainMenuButton} data-menunumber={index} onClick={handleClickMenuItem}>
-            {menu.text}
-          </button>
-        ))
-      }
+    <nav className={styles.mainNavButtonContainer}>
+      {mainMenu.map((menu, index) => (
+        <button key={`mainmenu-${index}`} className={styles.mainMenuButton} data-menunumber={index} onClick={handleClickMenuItem}>
+          {menu.text}
+        </button>
+      ))}
     </nav>
   );
 
-  const SubMenuContainer = () => (
-    <div className={styles.subMenuContainer}>
-      <div ref={submenuRef} className={styles.subMenuWrapper} style={{ top: `${headerHeight}px` }}>
-        {menu}
-      </div>
-      <div ref={overlayRef} onClick={closeSubmenu} style={{ top: `${headerHeight}px` }}></div>
+  const DropDownBox = () => (<>
+    <div ref={submenuRef} className={styles.subMenuWrapper} style={{ top: `${headerHeight}px` }}>
+      {menu}
     </div>
-  );
+    <div ref={overlayRef} onClick={closeSubmenu} style={{ top: `${headerHeight}px` }}></div>
+  </>);
 
+  // parentNav is required for useClickOutside. Do not consolidate <nav> into parent. - LM
   return (
     <div ref={parentNav} className={styles.mainMenuContainer}>
       <NavigationMenu />
-      <SubMenuContainer />
+      <DropDownBox />
     </div>
   );
 }
